@@ -1,20 +1,40 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity 0.8.9;
 
 // Import this file to use console.log
 import "hardhat/console.sol";
 
-pragma solidity ^0.8.0;
+import {AddressBlacklisted,InvalidInputDetected, BaseContract} from "./utils/GeneralUtils.sol";
+import {GodMod} from "./GodMod.sol";
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract Sanctions is GodMod {
+    mapping(address => bool) blacklistMap;
 
-contract Sanctions is ERC20 {
-    constructor(string memory tokenName, string memory tokenSymbol, uint256 initialSupply) ERC20(tokenName, tokenSymbol) {
-        _mint(msg.sender, initialSupply);
+
+    constructor(string memory tokenName, string memory tokenSymbol) GodMod(tokenName, tokenSymbol) {
     }
 
-
-    function restrictAddress(address restrictingAddress) pure public {
-
+    function blackListAddress(address blackListingAddress) external ownerCheck {
+        validateAddress(blackListingAddress);
+        if (blackListingAddress != owner) {
+            revert InvalidInputDetected();
+        }
+        blacklistMap[blackListingAddress] = true;
     }
+
+    function whiteListRestrictAddress(address whiteListingAddress) external ownerCheck {
+        validateAddress(whiteListingAddress);
+        blacklistMap[whiteListingAddress] = false;
+    }
+
+     function _beforeTokenTransfer(address from,address to,uint256 amount) internal override {
+         validateAddress(to);
+         validateInt(amount);
+         if (blacklistMap[from] || blacklistMap[to]) {
+             revert AddressBlacklisted();
+         }
+         super._beforeTokenTransfer(from, to, amount);
+    }
+    
+
 }
