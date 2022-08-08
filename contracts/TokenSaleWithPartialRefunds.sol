@@ -1,16 +1,51 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-// Import this file to use console.log
-import "hardhat/console.sol";
+import {DataIsImmutable, AddressBlacklisted, InvalidInputDetected, InSufficientFunds, InSufficientTokens, BaseContract} from "./utils/GeneralUtils.sol";
+import {TokenSale} from "./TokenSale.sol";
 
-pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract TokenSaleWithPartialRefunds is TokenSale {
+    constructor(string memory tokenName, string memory tokenSymbol) TokenSale(tokenName, tokenSymbol) {
+    }
 
-contract TokenSaleWithPartialRefunds is ERC20 {
-    constructor(string memory tokenName, string memory tokenSymbol, uint256 initialSupply) ERC20(tokenName, tokenSymbol) {
-        _mint(msg.sender, initialSupply);
+    function tokenSaleWithRefundSellBack(uint256 amount) external {
+        uint contractTokenBalance = balanceOf(msg.sender);
+        if (contractTokenBalance >= amount) {
+            _transfer(msg.sender, address(this), amount);
+        } else{
+            revert InSufficientTokens();
+        }
+        if (amount >= minimumTransfer) {
+            uint rewardFactor = amount / minimumTransfer;
+            uint payBack = (oneEtherInWei * rewardFactor) / 2;
+            if (address(this).balance > payBack) {
+                bool success = payUserEther(payBack);
+                if (!success) {
+                    revert InSufficientFunds();
+                }
+            } else {
+                revert InSufficientFunds();
+            }
+        }
+    }
+
+    function TokenSaleWithRefundBuyBack(uint256 amount) external payable checkSufficientFunds(false, pricePerOneToken * amount) {
+        uint contractTokenBalance = balanceOf(address(this));
+        if (contractTokenBalance >= amount) {
+            _transfer(address(this), msg.sender, amount);
+        } else {
+            revert InSufficientTokens();
+        }
+        unchecked {
+            uint returningEther = msg.value - (pricePerOneToken * amount);
+            if (returningEther > 0) {
+                bool success = payUserEther(returningEther);
+                if (!success) {
+                    revert InSufficientFunds();
+                }
+            }
+        }
     }
 
 

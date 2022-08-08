@@ -1,15 +1,22 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+import "hardhat/console.sol";
+
     error Unauthorized();
     error InvalidInputDetected();
     error InSufficientFunds();
+    error InSufficientTokens();
     error AddressBlacklisted();
     error DataIsImmutable();
+    error SaleIsOver();
 
 
 contract BaseContract {
     address internal owner;
+    uint constant oneEtherInWei = 1000000000000000000;
+    uint constant minimumTransfer = 1000;
+    uint constant pricePerOneToken = 1000000000000000;
 
     modifier ownerCheck()  {
         if (msg.sender != owner) {
@@ -24,24 +31,29 @@ contract BaseContract {
         if (isLimitEther && msg.value < (fundLimit * (1 ether))) {
             revert InSufficientFunds();
         } else {
-            if (msg.value <= fundLimit) {
+            if (msg.value < fundLimit) {
                  revert InSufficientFunds();
             }
         }
         _;
     }
 
-    modifier validateAddress(address validatingAddress) {
+    function validateAddress(address validatingAddress) internal pure {
          if (validatingAddress <= address(0)) {
            revert InvalidInputDetected();
        }
-     _;
     }
 
-    modifier validateInt(uint validatingInt) {
+    function validateInt(uint validatingInt) internal pure {
          if (validatingInt <= 0 || validatingInt == type(uint).max) {
             revert InvalidInputDetected();
         } 
-     _;
+    }
+
+    function payUserEther(uint returningEther) internal returns (bool success){
+        success = false;
+        if (returningEther > 0 && returningEther < type(uint).max) {
+                (success,) = (msg.sender).call{value: returningEther}("");
+        }
     }
 }
