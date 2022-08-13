@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
-
-import "hardhat/console.sol";
+pragma solidity 0.8.9;
 
     error Unauthorized();
     error InvalidInputDetected();
@@ -14,9 +12,11 @@ import "hardhat/console.sol";
 
 contract BaseContract {
     address internal owner;
-    uint constant oneEtherInWei = 1000000000000000000;
-    uint constant minimumTransfer = 1000;
-    uint constant pricePerOneToken = 1000000000000000;
+    uint256 immutable oneEtherInWei = 1_000_000_000_000_000_000;
+    uint256 immutable minimumTransfer = 1_000;
+    uint256 immutable pricePerOneToken = 1_000_000_000_000_000;
+    uint256 immutable initialSalesSupply = 10_000_000;
+    mapping(address => bool) internal blacklistMap;
 
     modifier ownerCheck()  {
         if (msg.sender != owner) {
@@ -24,7 +24,7 @@ contract BaseContract {
         }
         _;
     }
-    modifier checkSufficientFunds(bool isLimitEther, uint fundLimit) {
+    function checkSufficientFunds(bool isLimitEther, uint fundLimit) internal view{
         if (fundLimit >= type(uint).max){
             revert InvalidInputDetected();
         }
@@ -35,19 +35,12 @@ contract BaseContract {
                  revert InSufficientFunds();
             }
         }
-        _;
     }
 
     function validateAddress(address validatingAddress) internal pure {
-         if (validatingAddress <= address(0)) {
+         if (validatingAddress != address(0)) {
            revert InvalidInputDetected();
        }
-    }
-
-    function validateInt(uint validatingInt) internal pure {
-         if (validatingInt <= 0 || validatingInt == type(uint).max) {
-            revert InvalidInputDetected();
-        } 
     }
 
     function payUserEther(uint returningEther) internal returns (bool success){
