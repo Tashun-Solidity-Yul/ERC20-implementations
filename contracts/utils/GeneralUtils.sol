@@ -10,12 +10,14 @@ pragma solidity 0.8.9;
     error SaleIsOver();
 
 
+
 contract BaseContract {
     address internal owner;
     uint256 immutable oneEtherInWei = 1_000_000_000_000_000_000;
     uint256 immutable minimumTransfer = 1_000;
     uint256 immutable pricePerOneToken = 1_000_000_000_000_000;
     uint256 immutable initialSalesSupply = 10_000_000;
+    uint256 immutable payBackShareDenominator = 2;
     mapping(address => bool) internal blacklistMap;
 
     modifier ownerCheck()  {

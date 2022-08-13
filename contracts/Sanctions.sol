@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.9;
 
-import {AddressBlacklisted,InvalidInputDetected, BaseContract} from "./utils/GeneralUtils.sol";
+import { InvalidInputDetected, AddressBlacklisted, BaseContract} from "./utils/GeneralUtils.sol";
 import {GodMod} from "./GodMod.sol";
 
 contract Sanctions is GodMod {

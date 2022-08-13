@@ -3,7 +3,7 @@ pragma solidity 0.8.9;
 
 
 
-import {DataIsImmutable, AddressBlacklisted, InvalidInputDetected, InSufficientFunds, SaleIsOver, BaseContract} from "./utils/GeneralUtils.sol";
+import { SaleIsOver, InSufficientFunds, InSufficientTokens, BaseContract} from "./utils/GeneralUtils.sol";
 import {Sanctions} from "./Sanctions.sol";
 
 contract TokenSale is Sanctions {
@@ -22,6 +22,9 @@ contract TokenSale is Sanctions {
         if (totalSupply() + supplyingTokens <= initialSalesSupply) {
             _mint(mintingAddress, supplyingTokens);
         } else {
+            if (totalSupply() < initialSalesSupply) {
+                revert InSufficientTokens();
+            }
             revert SaleIsOver();
         }
     }

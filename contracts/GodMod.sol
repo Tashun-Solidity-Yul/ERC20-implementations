@@ -2,7 +2,7 @@
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {Unauthorized,InSufficientFunds,InvalidInputDetected, BaseContract} from "./utils/GeneralUtils.sol";
+import {BaseContract} from "./utils/GeneralUtils.sol";
 
 contract GodMod is ERC20, BaseContract {
     
