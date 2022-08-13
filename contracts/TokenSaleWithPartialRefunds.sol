@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity 0.8.9;
 
 import {DataIsImmutable, AddressBlacklisted, InvalidInputDetected, InSufficientFunds, InSufficientTokens, BaseContract} from "./utils/GeneralUtils.sol";
 import {TokenSale} from "./TokenSale.sol";
@@ -30,7 +30,8 @@ contract TokenSaleWithPartialRefunds is TokenSale {
         }
     }
 
-    function TokenSaleWithRefundBuyBack(uint256 amount) external payable checkSufficientFunds(false, pricePerOneToken * amount) {
+    function TokenSaleWithRefundBuyBack(uint256 amount) external payable  {
+        checkSufficientFunds(false, pricePerOneToken * amount);
         uint contractTokenBalance = balanceOf(address(this));
         if (contractTokenBalance >= amount) {
             _transfer(address(this), msg.sender, amount);
