@@ -12,14 +12,11 @@ contract TokenSaleWithPartialRefunds is TokenSale {
     function SellBack(uint256 amount) external {
         // user sends a normal amount which is converted to 18 decimal places
         uint256 amountWithDecimals = (amount * 10 ** 18);
-        require(userTokenBalance >= amountWithDecimals, "Insufficient Funds");
+        require(userTokenBalance < amountWithDecimals, "Insufficient Tokens to sell");
         uint256 userTokenBalance = balanceOf(msg.sender);
-        // check if the user has enough tokens
-        if (userTokenBalance >= amountWithDecimals) {
-            _transfer(msg.sender, address(this), amount);
-        } else {
-            revert InSufficientTokens();
-        }
+
+        _transfer(msg.sender, address(this), amount);
+
 //      if the amount is met the minimum amount user is eligible for th reward
         if (amountWithDecimals >= minimumTransfer) {
 //          reward factor will be x factor floor value of the minimum transfer
