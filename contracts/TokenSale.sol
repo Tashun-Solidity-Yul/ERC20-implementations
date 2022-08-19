@@ -20,18 +20,8 @@ contract TokenSale is Sanctions {
         validateAddress(mintingAddress);
         // tokens sent to User
         uint256 tokensSentToUser = (msg.value / pricePerOneToken) * 10 ** 18;
-
         if (totalSupply() + tokensSentToUser <= initialSalesSupply) {
             _mint(mintingAddress, tokensSentToUser);
-//            unchecked {
-//                uint returningEther = msg.value - (msg.value / pricePerOneToken) * pricePerOneToken;
-//                if (returningEther > 0 ) {
-//                    bool success = payUserEther(returningEther);
-//                    if (!success) {
-//                        revert InSufficientFunds();
-//                    }
-//                }
-//            }
         } else {
             if (totalSupply() < initialSalesSupply) {
                 revert InSufficientTokens();
@@ -41,7 +31,7 @@ contract TokenSale is Sanctions {
 
     }
 
-    function getContractBalance() external view ownerCheck returns (uint){
+    function getContractBalance() external view ownerCheck returns (uint256){
         return address(this).balance;
     }
 
