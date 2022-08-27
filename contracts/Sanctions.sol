@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.9;
 
-import { InvalidInputDetected, AddressBlacklisted, BaseContract} from "./utils/GeneralUtils.sol";
+import {InvalidInputDetected, AddressBlacklisted, BaseContract} from "./utils/GeneralUtils.sol";
 import {GodMod} from "./GodMod.sol";
 
 contract Sanctions is GodMod {
@@ -23,12 +23,12 @@ contract Sanctions is GodMod {
         blacklistMap[whiteListingAddress] = false;
     }
 
-     function _beforeTokenTransfer(address from,address to,uint256 amount) internal override {
-         if (blacklistMap[from] || blacklistMap[to]) {
-             revert AddressBlacklisted();
-         }
-         super._beforeTokenTransfer(from, to, amount);
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override {
+        if (blacklistMap[from] || blacklistMap[to]) {
+            revert AddressBlacklisted();
+        }
+        super._beforeTokenTransfer(from, to, amount);
     }
-    
+
 
 }

@@ -2,8 +2,7 @@
 pragma solidity 0.8.9;
 
 
-
-import { SaleIsOver, InSufficientFunds, InSufficientTokens, BaseContract} from "./utils/GeneralUtils.sol";
+import {SaleIsOver, InSufficientFunds, InSufficientTokens, BaseContract} from "./utils/GeneralUtils.sol";
 import {Sanctions} from "./Sanctions.sol";
 
 contract TokenSale is Sanctions {
@@ -37,16 +36,13 @@ contract TokenSale is Sanctions {
 
     function getFundsToOwnersAccount() external ownerCheck {
         // payable(msg.sender).transfer(address(this).balance);
-        if (address(this).balance > 0 ) {
+        if (address(this).balance > 0) {
             (bool success,) = owner.call{value : address(this).balance}("");
             if (!success) {
                 revert InSufficientFunds();
             }
         }
     }
-
-
-
 
 
 }
