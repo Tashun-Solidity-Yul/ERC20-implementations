@@ -17,13 +17,13 @@ contract TokenSaleWithPartialRefunds is TokenSale {
 
         _transfer(msg.sender, address(this), amount);
 
-//      if the amount is met the minimum amount user is eligible for th reward
+        // if the amount is met the minimum amount user is eligible for th reward
         if (amountWithDecimals >= minimumTransfer) {
-//          reward factor will be x factor floor value of the minimum transfer
+            // reward factor will be x factor floor value of the minimum transfer
             uint256 rewardFactor = amountWithDecimals / minimumTransfer;
             uint256 payBack = rewardFactor * payBackFactor;
             if (address(this).balance > payBack) {
-//             if the reward is possible to pay, user will be paid
+                // if the reward is possible to pay, user will be paid
                 bool success = payUserEther(payBack);
                 if (!success) {
                     revert InSufficientFunds();
@@ -37,7 +37,7 @@ contract TokenSaleWithPartialRefunds is TokenSale {
     function BuyBack(uint256 amount) external payable {
         checkSufficientFunds(false, pricePerOneToken * amount);
         uint256 contractTokenBalance = balanceOf(address(this));
-//      check if there are tokens in the contract
+        // check if there are tokens in the contract
         if (contractTokenBalance >= amount) {
             _transfer(address(this), msg.sender, amount);
         } else {

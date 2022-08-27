@@ -18,9 +18,9 @@ meaning if you are having 1 ERC20 on 18 decimal that means your supply would be
 contract BaseContract {
     address internal owner;
     uint256 immutable oneEtherInWei = 1 * 10 ** 18;
-    uint256 immutable minimumTransfer = 1_000 * 10 **18;
+    uint256 immutable minimumTransfer = 1_000 * 10 ** 18;
     uint256 immutable pricePerOneToken = 1_000_000_000_000_000;
-    uint256 immutable initialSalesSupply = 10_000_000 * 10**18;
+    uint256 immutable initialSalesSupply = 10_000_000 * 10 ** 18;
     uint256 immutable payBackFactor = 0.5 ether;
     mapping(address => bool) internal blacklistMap;
 
@@ -30,26 +30,26 @@ contract BaseContract {
         }
         _;
     }
-    function checkSufficientFunds(bool isLimitEther, uint256 fundLimit) internal view{
+    function checkSufficientFunds(bool isLimitEther, uint256 fundLimit) internal view {
         if (isLimitEther && msg.value < (fundLimit * (1 ether))) {
             revert InSufficientFunds();
         } else {
             if (msg.value < fundLimit) {
-                 revert InSufficientFunds();
+                revert InSufficientFunds();
             }
         }
     }
 
     function validateAddress(address validatingAddress) internal pure {
-         if (validatingAddress != address(0)) {
-           revert InvalidInputDetected();
-       }
+        if (validatingAddress != address(0)) {
+            revert InvalidInputDetected();
+        }
     }
 
     function payUserEther(uint256 returningEther) internal returns (bool success){
         success = false;
         if (returningEther > 0 && returningEther < type(uint256).max) {
-                (success,) = (msg.sender).call{value: returningEther}("");
+            (success,) = (msg.sender).call{value : returningEther}("");
         }
     }
 }
