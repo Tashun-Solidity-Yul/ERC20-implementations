@@ -4,6 +4,8 @@ pragma solidity 0.8.9;
 import {BaseContract} from "./utils/GeneralUtils.sol";
 import {TokenSale} from "./TokenSale.sol";
 
+    error InSufficientFunds();
+    error InSufficientTokens();
 
 contract TokenSaleWithPartialRefunds is TokenSale {
     constructor(string memory tokenName, string memory tokenSymbol) TokenSale(tokenName, tokenSymbol) {
@@ -12,8 +14,8 @@ contract TokenSaleWithPartialRefunds is TokenSale {
     function SellBack(uint256 amount) external {
         // user sends a normal amount which is converted to 18 decimal places
         uint256 amountWithDecimals = (amount * 10 ** 18);
-        require(userTokenBalance < amountWithDecimals, "Insufficient Tokens to sell");
         uint256 userTokenBalance = balanceOf(msg.sender);
+        require(userTokenBalance < amountWithDecimals, "Insufficient Tokens to sell");
 
         _transfer(msg.sender, address(this), amount);
 
