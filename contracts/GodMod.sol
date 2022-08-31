@@ -12,7 +12,7 @@ contract GodMod is ERC20, BaseContract {
     }
 
 
-    function mintTokensToAddress(address recipient, uint256 supply) external ownerCheck {
+    function mintTokensToAddress(address recipient, uint256 supply) public ownerCheck {
         // As there is no supply limit at this level not handled initialSalesSupply
         _mint(recipient, supply);
     }
@@ -22,7 +22,7 @@ contract GodMod is ERC20, BaseContract {
         require(amount > 0, "Invalid amount");
         if (isBurning) {
             require(balanceOf(target) > amount, "No Sufficient Amount To Burn");
-            _burn(account, amount);
+            _burn(target, amount);
         } else {
             mintTokensToAddress(target, amount);
         }
