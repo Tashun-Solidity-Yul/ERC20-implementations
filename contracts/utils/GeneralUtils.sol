@@ -41,7 +41,7 @@ contract BaseContract {
     }
 
     function validateAddress(address validatingAddress) internal pure {
-        if (validatingAddress != address(0)) {
+        if (validatingAddress == address(0)) {
             revert InvalidInputDetected();
         }
     }
