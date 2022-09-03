@@ -5,10 +5,10 @@ import {InvalidInputDetected, AddressBlacklisted, BaseContract} from "./utils/Ge
 import {GodMod} from "./GodMod.sol";
 
 contract Sanctions is GodMod {
-
-
-    constructor(string memory tokenName, string memory tokenSymbol) GodMod(tokenName, tokenSymbol) {
-    }
+    constructor(string memory tokenName, string memory tokenSymbol)
+        public
+        GodMod(tokenName, tokenSymbol)
+    {}
 
     function blackListAddress(address blackListingAddress) external ownerCheck {
         validateAddress(blackListingAddress);
@@ -18,17 +18,22 @@ contract Sanctions is GodMod {
         blacklistMap[blackListingAddress] = true;
     }
 
-    function whiteListRestrictAddress(address whiteListingAddress) external ownerCheck {
+    function whiteListRestrictAddress(address whiteListingAddress)
+        external
+        ownerCheck
+    {
         validateAddress(whiteListingAddress);
         blacklistMap[whiteListingAddress] = false;
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override {
         if (blacklistMap[from] || blacklistMap[to]) {
             revert AddressBlacklisted();
         }
         super._beforeTokenTransfer(from, to, amount);
     }
-
-
 }

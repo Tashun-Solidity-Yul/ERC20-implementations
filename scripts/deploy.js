@@ -27,3 +27,8 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+// let twentyThousandEtherInHex = null;
+// twentyThousandEtherInHex = utils.hexStripZeros(
+//     utils.parseEther("20000").toHexString()
+// );
