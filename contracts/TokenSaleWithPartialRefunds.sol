@@ -1,21 +1,26 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.9;
 
-import {BaseContract,InSufficientFunds, InSufficientTokens} from "./utils/GeneralUtils.sol";
+import {BaseContract, InSufficientFunds, InSufficientTokens} from "./utils/GeneralUtils.sol";
 import {TokenSale} from "./TokenSale.sol";
 
 //    error InSufficientFunds();
 //    error InSufficientTokens();
 
 contract TokenSaleWithPartialRefunds is TokenSale {
-    constructor(string memory tokenName, string memory tokenSymbol) TokenSale(tokenName, tokenSymbol) {
-    }
+    constructor(string memory tokenName, string memory tokenSymbol)
+        public
+        TokenSale(tokenName, tokenSymbol)
+    {}
 
-    function SellBack(uint256 amount) external {
+    function sellBack(uint256 amount) external {
         // user sends a normal amount which is converted to 18 decimal places
-        uint256 amountWithDecimals = (amount * 10 ** 18);
+        uint256 amountWithDecimals = (amount * 10**18);
         uint256 userTokenBalance = balanceOf(msg.sender);
-        require(userTokenBalance > amountWithDecimals, "Insufficient Tokens to sell");
+        require(
+            userTokenBalance > amountWithDecimals,
+            "Insufficient Tokens to sell"
+        );
 
         _transfer(msg.sender, address(this), amount);
 
@@ -36,7 +41,7 @@ contract TokenSaleWithPartialRefunds is TokenSale {
         }
     }
 
-    function BuyBack(uint256 amount) external payable {
+    function buyBack(uint256 amount) external payable {
         checkSufficientFunds(false, pricePerOneToken * amount);
         uint256 contractTokenBalance = balanceOf(address(this));
         // check if there are tokens in the contract
@@ -46,6 +51,4 @@ contract TokenSaleWithPartialRefunds is TokenSale {
             revert InSufficientTokens();
         }
     }
-
-
 }
