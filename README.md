@@ -1,33 +1,8 @@
-# Sample Hardhat Project
+# ERC20 Hardhat Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a
-script that deploys that contract.
+This project included a ERC20 Implementation built on top of Openzeppelin ERC20, 
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
-
-### eslint
-
-```eslint
-npm i eslint --save-dev 
-npm init @eslint/config
-npx eslint .\test\TokenSalesWithPartialRefundTest.js 
-```
-### only prettier
-``` only prettier
-npm install --save-dev prettier prettier-plugin-solidity
-npx prettier --write 'contracts/**/*.sol'
-```
-### solhint prettier
-```solhint prettier
-npm install --save-dev solhint solhint-plugin-prettier prettier prettier-plugin-solidity @nomiclabs/hardhat-solhint
-
-npx hardhat check
-```
+1. Authority token handling - minting burning
+2. Sanction implementation 
+3. Token sale 
+4. Token sale implementation with partial refunds is included 

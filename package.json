@@ -9,7 +9,8 @@
     "lint": "prettier --list-different contracts/**/*.sol",
     "eslint": "npx eslint ./test/*.js",
     "solhint-s": "npx solhint ./contracts/**/*.sol",
-    "solhint-f": "npx solhint ./contracts/**/*.sol --fix"
+    "solhint-f": "npx solhint ./contracts/**/*.sol --fix",
+    "test1": "nyc --reporter=text mocha"
   },
   "repository": {
     "type": "git",
@@ -41,7 +42,8 @@
     "solhint": "^3.3.7",
     "solhint-plugin-prettier": "^0.0.5",
     "solidity-coverage": "^0.7.21",
-    "typechain": "^8.1.0"
+    "typechain": "^8.1.0",
+    "nyc": "^15.1.0"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.3"
